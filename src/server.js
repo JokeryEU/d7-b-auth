@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import articlesRoutes from "./articles/articles.js";
 import authorsRoutes from "./articles/authors.js";
+import authRouter from "./articles/auth.js";
+import { jwtAuth } from "./auth/index.js";
 import ErrorResponse from "./lib/errorResponse.js";
 import mongoose from "mongoose";
 import {
@@ -30,8 +32,9 @@ const corsOptions = {
 app.use(cors());
 app.use(express.json());
 
-app.use("/articles", articlesRoutes);
-app.use("/authors", authorsRoutes);
+app.use("/", authRouter);
+app.use("/articles", jwtAuth, articlesRoutes);
+app.use("/authors", jwtAuth, authorsRoutes);
 
 app.use(badRequestErrorHandler);
 app.use(notFoundErrorHandler);

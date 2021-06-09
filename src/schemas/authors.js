@@ -47,7 +47,10 @@ AuthorSchema.static("findAuthorWithArticles", async function (id) {
 
 AuthorSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(
+      this.password,
+      parseInt(process.env.SALT_ROUNDS)
+    );
   }
   next();
 });
@@ -55,7 +58,6 @@ AuthorSchema.pre("save", async function (next) {
 AuthorSchema.statics.checkCredentials = async function (email, pw) {
   const user = await this.findOne({ email });
   if (user) {
-    console.log(user);
     const isMatch = await bcrypt.compare(pw, user.password);
     if (isMatch) return user;
     else return null;
@@ -69,6 +71,7 @@ AuthorSchema.methods.toJSON = function () {
 
   delete userObject.password;
   delete userObject.__v;
+  delete userObject.refreshToken;
   return userObject;
 };
 

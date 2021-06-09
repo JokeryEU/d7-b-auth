@@ -1,11 +1,11 @@
 import express from "express";
 import AuthorSchema from "../schemas/authors.js";
 import ErrorResponse from "../lib/errorResponse.js";
-import { basicAuthMiddleware } from "../auth/index.js";
+import { adminOnly } from "../auth/index.js";
 
 const authorRouter = express.Router();
 
-authorRouter.get("/", basicAuthMiddleware, async (req, res, next) => {
+authorRouter.get("/", adminOnly, async (req, res, next) => {
   try {
     const authors = await AuthorSchema.find();
     res.status(200).send({ authors });
@@ -23,17 +23,7 @@ authorRouter.post("/", async (req, res, next) => {
   }
 });
 
-authorRouter.post("/register", async (req, res, next) => {
-  try {
-    const newAuthor = await AuthorSchema.create(req.body);
-    const { _id } = newAuthor;
-    res.status(201).send({ _id });
-  } catch (error) {
-    next(error);
-  }
-});
-
-authorRouter.put("/me", basicAuthMiddleware, async (req, res, next) => {
+authorRouter.put("/me", async (req, res, next) => {
   try {
     const updates = Object.keys(req.body);
 
@@ -41,6 +31,15 @@ authorRouter.put("/me", basicAuthMiddleware, async (req, res, next) => {
 
     await req.user.save();
 
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
+authorRouter.delete("/me", async (req, res, next) => {
+  try {
+    await req.user.deleteOne();
     res.status(204).send();
   } catch (error) {
     next(error);
