@@ -36,6 +36,7 @@ const AuthorSchema = new Schema(
       default: "User",
     },
     articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
+    refreshToken: { type: String },
   },
   { timestamps: true }
 );
