@@ -34,6 +34,7 @@ const AuthorSchema = new Schema(
       required: true,
       enum: ["Admin", "User"],
       default: "User",
+      immutable: true,
     },
     articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
     refreshToken: { type: String },
