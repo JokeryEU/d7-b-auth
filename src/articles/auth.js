@@ -10,7 +10,8 @@ authRouter.post("/register", async (req, res, next) => {
   try {
     const newAuthor = await AuthorModel.create(req.body);
     const { _id } = newAuthor;
-    res.status(201).send({ _id });
+    const tokens = await auth(user);
+    res.status(201).send({ _id, tokens });
   } catch (error) {
     next(error);
   }
