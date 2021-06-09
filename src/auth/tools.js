@@ -45,7 +45,7 @@ const verifyRefreshToken = (token) =>
 
 export const auth = async (user) => {
   const newAccessToken = await generateJWT({ _id: user._id });
-  const newRefreshToken = await generateJWT({ _id: user._id });
+  const newRefreshToken = await generateRefreshJWT({ _id: user._id });
   user.refreshToken = newRefreshToken;
   await user.save();
   return { token: newAccessToken, refreshToken: newRefreshToken };
@@ -66,7 +66,7 @@ export const refreshJWT = async (oldRefreshToken) => {
   }
 
   const newAccessToken = await generateJWT({ _id: user._id });
-  const newRefreshToken = await generateJWT({ _id: user._id });
+  const newRefreshToken = await generateRefreshJWT({ _id: user._id });
 
   user.refreshToken = newRefreshToken;
   await user.save();

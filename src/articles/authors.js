@@ -23,6 +23,14 @@ authorRouter.post("/", async (req, res, next) => {
   }
 });
 
+authorRouter.get("/me", async (req, res, next) => {
+  try {
+    res.send(req.user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 authorRouter.put("/me", async (req, res, next) => {
   try {
     const updates = Object.keys(req.body);
