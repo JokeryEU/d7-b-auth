@@ -12,28 +12,32 @@ passport.use(
     },
     async (request, accessToken, refreshToken, profile, done) => {
       console.log(profile);
+
       try {
         const user = await AuthorModel.findOne({
           googleId: profile.id,
         });
         if (user) {
           const tokens = await auth(user);
+
           done(null, { user, tokens });
         } else {
           const newUser = {
-            name: profile.given_name,
-            surname: profile.family_name,
-            email: profile.email,
+            firstName: profile._json.given_name,
+            lastName: profile._json.family_name,
+            email: profile._json.email,
             role: "User",
             googleId: profile.id,
           };
           const createdUser = new AuthorModel(newUser);
           const created = await createdUser.save();
           const tokens = await auth(created);
+
           done(null, { created, tokens });
         }
       } catch (error) {
-        next(error);
+        console.log(error);
+        done(error);
       }
     }
   )

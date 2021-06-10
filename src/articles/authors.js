@@ -5,7 +5,7 @@ import { adminOnly } from "../auth/index.js";
 
 const authorRouter = express.Router();
 
-authorRouter.get("/", adminOnly, async (req, res, next) => {
+authorRouter.get("/", async (req, res, next) => {
   try {
     const authors = await AuthorSchema.find();
     res.status(200).send({ authors });

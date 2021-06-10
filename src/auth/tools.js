@@ -48,7 +48,7 @@ export const auth = async (user) => {
   const newRefreshToken = await generateRefreshJWT({ _id: user._id });
   user.refreshToken = newRefreshToken;
   await user.save();
-  return { token: newAccessToken, refreshToken: newRefreshToken };
+  return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 };
 
 export const refreshJWT = async (oldRefreshToken) => {
