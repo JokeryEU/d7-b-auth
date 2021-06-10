@@ -21,7 +21,7 @@ const AuthorSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
       minlength: [8, "Minimum length must be 8 chars"],
       trim: true,
     },
@@ -38,6 +38,7 @@ const AuthorSchema = new Schema(
     },
     articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
     refreshToken: { type: String },
+    googleId: { type: String },
   },
   { timestamps: true }
 );

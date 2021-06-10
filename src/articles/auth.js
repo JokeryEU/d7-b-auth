@@ -3,7 +3,7 @@ import AuthorModel from "../schemas/authors.js";
 import ErrorResponse from "../lib/errorResponse.js";
 import { jwtAuth } from "../auth/index.js";
 import { auth, refreshJWT } from "../auth/tools.js";
-
+import passport from "passport";
 const authRouter = express.Router();
 
 authRouter.post("/register", async (req, res, next) => {
@@ -56,5 +56,30 @@ authRouter.post("/refreshToken", async (req, res, next) => {
     next(new ErrorResponse(error, 401));
   }
 });
+
+authRouter.get(
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+authRouter.get(
+  "/auth/google/test",
+  passport.authenticate("google"),
+  async (req, res, next) => {
+    try {
+      res.cookie("accessToken", req.user.tokens.accessToken, {
+        sameSite: "lax",
+        httpOnly: true,
+      });
+
+      res.cookie("refreshToken", req.user.tokens.refreshToken, {
+        sameSite: "lax",
+        httpOnly: true,
+      });
+      res.status(200).redirect("http://localhost:3000");
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default authRouter;

@@ -4,7 +4,8 @@ import AuthorModel from "../schemas/authors.js";
 
 export const jwtAuth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    // const token = req.headers.authorization.split(" ")[1];
+    const token = req.cookies.accessToken;
     const decoded = await verifyJWT(token);
     const user = await AuthorModel.findOne({
       _id: decoded._id,

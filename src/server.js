@@ -1,11 +1,14 @@
 import express from "express";
 import cors from "cors";
+import passport from "passport";
+import oauth from "./auth/oauth.js";
 import articlesRoutes from "./articles/articles.js";
 import authorsRoutes from "./articles/authors.js";
 import authRouter from "./articles/auth.js";
 import { jwtAuth } from "./auth/index.js";
 import ErrorResponse from "./lib/errorResponse.js";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import {
   notFoundErrorHandler,
   badRequestErrorHandler,
@@ -29,8 +32,10 @@ const corsOptions = {
   },
 };
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
+app.use(passport.initialize());
 
 app.use("/", authRouter);
 app.use("/articles", jwtAuth, articlesRoutes);
