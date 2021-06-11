@@ -14,6 +14,14 @@ export const badRequestErrorHandler = (err, req, res, next) => {
   }
 };
 
+export const unauthorizedErrorHandler = (err, req, res, next) => {
+  if (err.httpStatusCode === 401) {
+    res.status(401).send(err.errorList);
+  } else {
+    next(err);
+  }
+};
+
 export const forbiddenErrorHandler = (err, req, res, next) => {
   if (err.httpStatusCode === 403) {
     res.status(403).send("Forbidden!");

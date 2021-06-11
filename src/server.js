@@ -13,6 +13,7 @@ import {
   notFoundErrorHandler,
   badRequestErrorHandler,
   catchAllErrorHandler,
+  unauthorizedErrorHandler,
 } from "./lib/errorHandlers.js";
 import listEndpoints from "express-list-endpoints";
 
@@ -43,6 +44,7 @@ app.use("/authors", jwtAuth, authorsRoutes);
 
 app.use(badRequestErrorHandler);
 app.use(notFoundErrorHandler);
+app.use(unauthorizedErrorHandler);
 app.use(catchAllErrorHandler);
 
 const port = process.env.PORT || 3005;
