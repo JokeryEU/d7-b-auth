@@ -1,6 +1,7 @@
 // import atob from "atob";
 import { verifyJWT } from "./tools.js";
 import AuthorModel from "../schemas/authors.js";
+import ErrorResponse from "../lib/errorResponse.js";
 
 export const jwtAuth = async (req, res, next) => {
   try {
@@ -11,12 +12,13 @@ export const jwtAuth = async (req, res, next) => {
       _id: decoded._id,
     });
     if (!user) {
-      throw new Error("Credentials are incorect");
+      throw new ErrorResponse(`id not found`, 404);
     }
     req.user = user;
     next();
   } catch (error) {
     console.log(error);
+    throw new ErrorResponse(`please login`, 401);
     next(error);
   }
 };

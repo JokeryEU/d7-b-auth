@@ -70,5 +70,5 @@ export const refreshJWT = async (oldRefreshToken) => {
 
   user.refreshToken = newRefreshToken;
   await user.save();
-  return { token: newAccessToken, refreshToken: newRefreshToken };
+  return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 };
