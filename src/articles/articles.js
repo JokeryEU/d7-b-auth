@@ -53,7 +53,6 @@ articleRouter.get("/", async (req, res, next) => {
 
 articleRouter.get("/:id", async (req, res, next) => {
   try {
-    console.log(1000);
     const article = await ArticleSchema.findById(req.params.id);
     if (!article) {
       return next(new ErrorResponse(`ID ${req.params.id} not found`));
